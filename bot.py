@@ -13,7 +13,6 @@ from telegram.ext import (
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-
 def is_paid(user_id):
     if not os.path.exists("users.json"):
         return False
@@ -31,8 +30,8 @@ def is_paid(user_id):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "👋 Welcome!\n\n"
-        "यह bot सिर्फ PAID users के लिए है.\n"
-        "Admin से संपर्क करें."
+        "यह bot सिर्फ PAID users के लिए है।\n"
+        "Admin से संपर्क करें।"
     )
 
 
@@ -40,21 +39,22 @@ async def handle_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
 
     if not is_paid(user_id):
-        await update.message.reply_text("❌ Access denied. Paid user नहीं है.")
+        await update.message.reply_text("❌ Access denied. Paid user नहीं है।")
         return
 
     if update.message.document:
         await update.message.reply_text("✅ File received (paid user).")
 
 
-def main():
+async def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.Document.ALL, handle_file))
 
-    app.run_polling()   # ✅ await नहीं
+    await app.run_polling()
 
 
 if __name__ == "__main__":
-    main()
+    import asyncio
+    asyncio.run(main())
