@@ -1,4 +1,7 @@
 import os
+import json
+from datetime import datetime
+
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder,
@@ -10,15 +13,39 @@ from telegram.ext import (
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+
+def is_paid(user_id: int) -> bool:
+    if not os.path.exists("users.json"):
+        return False
+
+    with open("users.json", "r") as f:
+        users = json.load(f)
+
+    if str(user_id) in users:
+        expiry = datetime.strptime(users[str(user_id)], "%Y-%m-%d")
+        return datetime.now() <= expiry
+
+    return False
+
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "👋 Welcome!\n\n"
-        "यह bot केवल PAID users के लिए है।\n"
+        "यह bot सिर्फ PAID users के लिए है।\n"
         "Admin से संपर्क करें।"
     )
 
+
 async def handle_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("✅ File received.")
+    user_id = update.message.from_user.id
+
+    if not is_paid(user_id):
+        await update.message.reply_text("❌ Access denied. Paid user नहीं हो।")
+        return
+
+    if update.message.document:
+        await update.message.reply_text("✅ File received (paid user).")
+
 
 async def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
@@ -27,6 +54,7 @@ async def main():
     app.add_handler(MessageHandler(filters.Document.ALL, handle_file))
 
     await app.run_polling()
+
 
 if __name__ == "__main__":
     import asyncio
