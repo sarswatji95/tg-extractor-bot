@@ -31,8 +31,8 @@ def is_paid(user_id: int) -> bool:
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "👋 Welcome!\n\n"
-        "यह bot सिर्फ PAID users के लिए है.\n"
-        "Admin से संपर्क करें."
+        "यह bot सिर्फ PAID users के लिए है।\n"
+        "Admin से संपर्क करें।"
     )
 
 
@@ -40,7 +40,7 @@ async def handle_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
 
     if not is_paid(user_id):
-        await update.message.reply_text("❌ Access denied. Paid user नहीं है.")
+        await update.message.reply_text("❌ Access denied. Paid user नहीं है।")
         return
 
     if update.message.document:
