@@ -52,7 +52,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.Document.ALL, handle_file))
 
-    await app.run_polling()
+    await app.run_polling(close_loop=False)
 
 
 if __name__ == "__main__":
