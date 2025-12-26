@@ -1,4 +1,4 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, Filters
 import os
 import json
 from datetime import datetime
