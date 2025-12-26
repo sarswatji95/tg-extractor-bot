@@ -47,15 +47,14 @@ async def handle_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("✅ File received (paid user).")
 
 
-async def main():
+def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
-    filters.Document.ALL
+    app.add_handler(MessageHandler(filters.Document.ALL, handle_file))
 
-    await app.run_polling()
+    app.run_polling()   # ✅ await नहीं
 
 
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    main()
