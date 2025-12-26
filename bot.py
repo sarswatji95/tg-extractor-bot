@@ -11,7 +11,7 @@ from telegram.ext import (
     filters
 )
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("7862802172:AAFJ4tJ4aIBEDZ-jrW1yptvhEC-uyPhyx5U")
 
 def is_paid(user_id):
     if not os.path.exists("users.json"):
